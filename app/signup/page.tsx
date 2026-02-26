@@ -1,13 +1,13 @@
 import { StarField } from "@/components/star-field"
-import { LoginForm } from "@/components/login-form"
+import { SignupForm } from "@/components/signup-form"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Login — NightPage",
-  description: "Login to NightPage. Pick up where you paused.",
+  title: "Create account — NightPage",
+  description: "Sign up for NightPage. Start keeping your anchors.",
 }
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <>
       <StarField />
@@ -30,7 +30,7 @@ export default function LoginPage() {
           aria-hidden="true"
         />
 
-        <LoginForm />
+        <SignupForm />
       </div>
     </>
   )

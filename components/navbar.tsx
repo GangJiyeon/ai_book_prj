@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
   { href: "/bookshelf", label: "Bookshelf" },
-  { href: "#", label: "Profile" },
+  { href: "/settings", label: "Profile" },
 ]
 
 export function Navbar() {
@@ -62,12 +62,20 @@ export function Navbar() {
           >
             <Search className="h-4 w-4" />
           </button>
-          <button
+          <Link
+            href="/login"
             className="hidden md:inline-flex h-8 items-center justify-center rounded-lg border border-border bg-secondary/30 px-4 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            Sign in
-          </button>
+            Login
+          </Link>
+          <Link
+            href="/signup"
+            className="hidden md:inline-flex h-8 items-center justify-center rounded-lg border border-border bg-secondary/30 px-4 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            Sign up
+          </Link>
           {/* Mobile hamburger */}
           <button
             className="flex md:hidden h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary/40 hover:text-foreground"
@@ -101,11 +109,20 @@ export function Navbar() {
                 </Link>
               )
             })}
-            <button
+            <Link
+              href="/login"
               className="mt-2 h-9 w-full rounded-lg border border-border bg-secondary/30 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
+              onClick={() => setMobileOpen(false)}
             >
-              Sign in
-            </button>
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="mt-2 h-9 w-full rounded-lg border border-border bg-secondary/30 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
+              onClick={() => setMobileOpen(false)}
+            >
+              Sign up
+            </Link>
           </div>
         </div>
       )}
