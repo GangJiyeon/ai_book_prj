@@ -49,7 +49,7 @@ export default function BookshelfPage() {
       >
         <Navbar />
 
-        <main className="mx-auto max-w-6xl px-4 py-8 lg:px-6">
+        <main className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
           {/* Page header */}
           <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col gap-2">
