@@ -7,6 +7,7 @@ import { BookOpen, Eye, EyeOff, Loader2, AlertCircle, ChevronLeft } from "lucide
 import * as Dialog from "@radix-ui/react-dialog"
 
 export function LoginForm() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -14,15 +15,23 @@ export function LoginForm() {
   const [forgotOpen, setForgotOpen] = useState(false)
   const [forgotEmail, setForgotEmail] = useState("")
   const [forgotSent, setForgotSent] = useState(false)
+  const [id, setId] = useState("")
+  const [password, setPassword] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setShowError(false)
     setLoading(true)
-    // Mock loading, then show error state
+    const capturedId = id
+    const capturedPassword = password
     setTimeout(() => {
       setLoading(false)
-      setShowError(true)
+      if (capturedId === "111" && capturedPassword === "111") {
+        localStorage.setItem("user", JSON.stringify({ username: "user111" }))
+        router.push("/")
+      } else {
+        setShowError(true)
+      }
     }, 1500)
   }
 
@@ -30,8 +39,6 @@ export function LoginForm() {
     e.preventDefault()
     setForgotSent(true)
   }
-
-  const router = useRouter()
 
   return (
     <div className="relative w-full max-w-[420px] mx-auto px-4 sm:px-0">
@@ -111,10 +118,12 @@ export function LoginForm() {
               </label>
               <input
                 id="email"
-                type="email"
+                type="text"
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 className="h-10 rounded-lg border border-border/60 bg-secondary/20 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                 style={{ fontFamily: "var(--font-body)" }}
               />
@@ -136,6 +145,8 @@ export function LoginForm() {
                   placeholder="Your password"
                   autoComplete="current-password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="h-10 w-full rounded-lg border border-border/60 bg-secondary/20 px-3.5 pr-10 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                   style={{ fontFamily: "var(--font-body)" }}
                 />
