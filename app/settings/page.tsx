@@ -1,25 +1,28 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { StarField } from "@/components/star-field"
 import { Navbar } from "@/components/navbar"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import type { Metadata } from "next"
-
-export const metadata: Metadata = {
-  title: "Account Settings — NightPage",
-  description: "Manage your profile and reading identity.",
-}
 
 export default function SettingsPage() {
+  const [language, setLanguage] = useState<"en" | "ko">("en")
+
+  useEffect(() => {
+    const stored = localStorage.getItem("language") as "en" | "ko" | null
+    if (stored) setLanguage(stored)
+  }, [])
+
+  function handleLanguageChange(value: "en" | "ko") {
+    setLanguage(value)
+    localStorage.setItem("language", value)
+  }
+
   return (
     <>
       <StarField />
-      <div
-        className="relative z-10 min-h-screen"
-        style={{
-          background:
-            "linear-gradient(180deg, #080c18 0%, #0a0e1a 20%, #0f1629 60%, #0a0e1a 100%)",
-        }}
-      >
+      <div className="relative z-10 min-h-screen bg-background">
         <Navbar />
 
         <main className="mx-auto max-w-3xl px-4 py-12 lg:px-6 space-y-10">
@@ -158,6 +161,19 @@ export default function SettingsPage() {
                 </select>
               </div>
               <div className="flex items-center justify-between">
+                <span className="text-sm text-foreground">Language</span>
+                <select
+                  value={language}
+                  onChange={(e) => handleLanguageChange(e.target.value as "en" | "ko")}
+                  className="h-8 rounded-lg border border-border/60 bg-secondary/20 px-2 text-sm text-foreground"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  <option value="en">English</option>
+                  <option value="ko">한국어</option>
+                </select>
+              </div>
+              {/* Dark mode — hidden on mobile (accessible via top navbar toggle) */}
+              <div className="hidden md:flex items-center justify-between">
                 <span className="text-sm text-foreground">Dark mode</span>
                 <Switch defaultChecked />
               </div>

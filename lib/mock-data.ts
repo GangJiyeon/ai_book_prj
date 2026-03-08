@@ -271,6 +271,25 @@ export const mockBooks: MockBook[] = [
       { user: "mira.reads", text: "Hearing what you need, not what was said. Yes." },
     ],
   },
+  {
+    id: "b2",
+    title: "Convenience Store Woman",
+    author: "Sayaka Murata",
+    coverGradient: "linear-gradient(135deg, #1a3a4a 0%, #2d4a3e 50%, #1e3a3a 100%)",
+    tags: ["literary", "quiet", "healing"],
+    likes: 289,
+    commentsCount: 91,
+    pausesCount: 143,
+    exchangeAvailable: true,
+    pauseHeat: [0.4, 0.7, 0.9, 0.6, 0.8, 1.0, 0.5, 0.7, 0.3, 0.6],
+    excerpt:
+      "A person who has lived for thirty-six years without conforming to society's expectations must be doing something right.",
+    excerptComments: [
+      { user: "joon_k", text: "Keiko's logic is impeccable and heartbreaking." },
+      { user: "sol.writes", text: "She finds identity in service. That is such a specific kind of peace." },
+      { user: "dawnreader", text: "The store as a mirror for society." },
+    ],
+  },
 ]
 
 export type ShelfCategory = "currently-reading" | "paused" | "finished" | "commented"
@@ -730,6 +749,238 @@ export function getChapterContent(
   return readerChapters.find(
     (c) => c.bookId === bookId && c.chapterNumber === chapter
   )
+}
+
+/* ──────────────────────────────────────────────
+   READING CONTEXT & SCOPE
+   ────────────────────────────────────────────── */
+
+export interface MockGroupActivity {
+  id: string
+  user: string
+  text: string
+  bookTitle: string
+  timeAgo: string
+}
+
+export interface MockGroup {
+  id: string
+  name: string
+  description: string
+  members: number
+  bookIds: string[]
+  recentActivity: MockGroupActivity[]
+}
+
+export const MOCK_GROUPS: MockGroup[] = [
+  {
+    id: "g1",
+    name: "Night Readers",
+    description: "Late night quiet reading — one chapter at a time.",
+    members: 12,
+    bookIds: ["1"],
+    recentActivity: [
+      { id: "ra1", user: "mira.reads", text: "The scar metaphor in the first paragraph hit different this time.", bookTitle: "The Namiya Letters", timeAgo: "2h ago" },
+      { id: "ra2", user: "quietpages", text: "Thirty years of silence, then three boys answer every letter. Beautiful.", bookTitle: "The Namiya Letters", timeAgo: "5h ago" },
+      { id: "ra3", user: "nocturn_e", text: "Finishing chapter 2 tonight — the Rabbit letter is devastating.", bookTitle: "The Namiya Letters", timeAgo: "1d ago" },
+    ],
+  },
+  {
+    id: "g2",
+    name: "Tokyo Book Club",
+    description: "Japanese lit and slow discussions, no spoilers.",
+    members: 48,
+    bookIds: ["1", "b2"],
+    recentActivity: [
+      { id: "ra4", user: "joon_k", text: "Keiko's relationship with routine is so relatable. The store is her world.", bookTitle: "Convenience Store Woman", timeAgo: "1h ago" },
+      { id: "ra5", user: "sol.writes", text: "The mailbox scene at the end of chapter 1 is unforgettable.", bookTitle: "The Namiya Letters", timeAgo: "3h ago" },
+      { id: "ra6", user: "half.moon", text: "Can we discuss the ending of Convenience Store Woman this weekend?", bookTitle: "Convenience Store Woman", timeAgo: "2d ago" },
+    ],
+  },
+]
+
+export function getGroupById(id: string): MockGroup | undefined {
+  return MOCK_GROUPS.find((g) => g.id === id)
+}
+
+/* ──────────────────────────────────────────────
+   SENTENCE FEED (MVP core)
+   ────────────────────────────────────────────── */
+
+export interface SentenceComment {
+  id: string
+  user: string
+  text: string
+  timeAgo: string
+  likes: number
+}
+
+export interface MockSentence {
+  id: string
+  text: string
+  bookTitle: string
+  author: string
+  uploadedBy: string
+  uploadedAt: string
+  likes: number
+  saves: number
+  comments: SentenceComment[]
+}
+
+export const SENTENCE_SORT_OPTIONS = [
+  { value: "trending", label: "Trending" },
+  { value: "newest", label: "Newest" },
+  { value: "most-commented", label: "Most commented" },
+] as const
+
+export const mockSentences: MockSentence[] = [
+  {
+    id: "s1",
+    text: "Sometimes a single sentence is enough to start over.",
+    bookTitle: "The Namiya Letters",
+    author: "K. Hiroshi",
+    uploadedBy: "mira.reads",
+    uploadedAt: "2d ago",
+    likes: 312,
+    saves: 148,
+    comments: [
+      { id: "sc1", user: "joon_k", text: "I've been sitting with this line for three days. It's the kind of sentence that makes you want to write something.", timeAgo: "2d ago", likes: 24 },
+      { id: "sc2", user: "quietpages", text: "Read this during a rough week. It actually helped.", timeAgo: "1d ago", likes: 18 },
+      { id: "sc3", user: "sol.writes", text: "What makes a sentence 'enough'? I think it's when it asks nothing of you but still gives everything.", timeAgo: "20h ago", likes: 31 },
+      { id: "sc4", user: "nocturn_e", text: "Starting over implies something ended. That tension is baked right into the line.", timeAgo: "14h ago", likes: 9 },
+    ],
+  },
+  {
+    id: "s2",
+    text: "From this distance, every lit window looks like a small act of defiance against the dark.",
+    bookTitle: "Small Fires in Distant Windows",
+    author: "J. Linden",
+    uploadedBy: "ink.stains",
+    uploadedAt: "3d ago",
+    likes: 278,
+    saves: 103,
+    comments: [
+      { id: "sc5", user: "page.turner", text: "I looked out my own window after reading this. Every one of them suddenly meant something.", timeAgo: "3d ago", likes: 41 },
+      { id: "sc6", user: "mira.reads", text: "Staying awake as defiance. Insomnia reframed completely.", timeAgo: "2d ago", likes: 27 },
+      { id: "sc7", user: "dawnreader", text: "The word 'defiance' does so much work here. It's not just light, it's resistance.", timeAgo: "1d ago", likes: 19 },
+    ],
+  },
+  {
+    id: "s3",
+    text: "A bookmark is just a promise you made to yourself: I will come back. But how many of those promises do we actually keep?",
+    bookTitle: "The Weight of Bookmarks",
+    author: "Y. Tanaka",
+    uploadedBy: "cartograph",
+    uploadedAt: "5d ago",
+    likes: 256,
+    saves: 89,
+    comments: [
+      { id: "sc8", user: "nocturn_e", text: "I have bookmarks in books I bought five years ago. This hit.", timeAgo: "5d ago", likes: 33 },
+      { id: "sc9", user: "lanternlight", text: "The guilt of an unused bookmark is so specific and so real.", timeAgo: "4d ago", likes: 22 },
+      { id: "sc10", user: "half.moon", text: "Is it worse to lose the bookmark or to find it again in a book you forgot?", timeAgo: "2d ago", likes: 16 },
+    ],
+  },
+  {
+    id: "s4",
+    text: "Reading alone at night is not loneliness. It is a different kind of company — the kind that asks nothing of you but attention.",
+    bookTitle: "The Reading Hour",
+    author: "P. Svensson",
+    uploadedBy: "half.moon",
+    uploadedAt: "1d ago",
+    likes: 234,
+    saves: 117,
+    comments: [
+      { id: "sc11", user: "sol.writes", text: "This is the most accurate description of why I read. Saved.", timeAgo: "1d ago", likes: 44 },
+      { id: "sc12", user: "quietpages", text: "Night reading is the original social network. Someone said that once and I never forgot it.", timeAgo: "20h ago", likes: 28 },
+    ],
+  },
+  {
+    id: "s5",
+    text: "I never met the person who underlined this passage before me. But I trust their judgment more than most people I know.",
+    bookTitle: "Footnotes to a Stranger",
+    author: "D. Elgin",
+    uploadedBy: "lanternlight",
+    uploadedAt: "4d ago",
+    likes: 198,
+    saves: 76,
+    comments: [
+      { id: "sc13", user: "cartograph", text: "Secondhand annotations are love letters from strangers. This whole book understands that.", timeAgo: "4d ago", likes: 37 },
+      { id: "sc14", user: "joon_k", text: "There is trust in following a stranger's underline. Completely agree.", timeAgo: "3d ago", likes: 21 },
+      { id: "sc15", user: "ink.stains", text: "I bought a used book once covered in notes. Best purchase I ever made.", timeAgo: "1d ago", likes: 14 },
+    ],
+  },
+  {
+    id: "s6",
+    text: "The letter was addressed to no one, which meant it was addressed to everyone.",
+    bookTitle: "Undelivered Letters",
+    author: "C. Moreau",
+    uploadedBy: "sol.writes",
+    uploadedAt: "6d ago",
+    likes: 189,
+    saves: 64,
+    comments: [
+      { id: "sc16", user: "mira.reads", text: "Addressed to no one, addressed to everyone. This is what great sentences do.", timeAgo: "6d ago", likes: 29 },
+      { id: "sc17", user: "dawnreader", text: "The act of writing is the delivery. The destination is secondary.", timeAgo: "5d ago", likes: 18 },
+    ],
+  },
+  {
+    id: "s7",
+    text: "What if you could map all the places where strangers held their breath? Every pause is a coordinate. Every silence is a landmark.",
+    bookTitle: "An Atlas of Pauses",
+    author: "R. Castillo",
+    uploadedBy: "dawnreader",
+    uploadedAt: "1w ago",
+    likes: 167,
+    saves: 58,
+    comments: [
+      { id: "sc18", user: "lanternlight", text: "A geography of hesitation. What a concept.", timeAgo: "1w ago", likes: 26 },
+      { id: "sc19", user: "page.turner", text: "I want this atlas to exist. I want to see where people paused in the books I love.", timeAgo: "6d ago", likes: 15 },
+    ],
+  },
+  {
+    id: "s8",
+    text: "She returned the book with a note tucked inside chapter seven. It said only: 'Thank you for lending me your evening.'",
+    bookTitle: "Borrowed Evenings",
+    author: "S. Nakamura",
+    uploadedBy: "nocturn_e",
+    uploadedAt: "1w ago",
+    likes: 145,
+    saves: 52,
+    comments: [
+      { id: "sc20", user: "half.moon", text: "Lending a book is lending a piece of time. That's exactly it.", timeAgo: "1w ago", likes: 23 },
+      { id: "sc21", user: "ink.stains", text: "The intimacy of lending a book is so underrated. It's the most personal thing.", timeAgo: "5d ago", likes: 11 },
+    ],
+  },
+]
+
+export function getSentenceById(id: string): MockSentence | undefined {
+  return mockSentences.find((s) => s.id === id)
+}
+
+export function getSortedSentences(sort: string): MockSentence[] {
+  const list = [...mockSentences]
+  if (sort === "newest") {
+    // already roughly ordered by recency in mock; reverse for demonstration
+    return list.reverse()
+  }
+  if (sort === "most-commented") {
+    return list.sort((a, b) => b.comments.length - a.comments.length)
+  }
+  // trending: by likes
+  return list.sort((a, b) => b.likes - a.likes)
+}
+
+export type ReadingContext =
+  | { mode: "solo" }
+  | { mode: "group"; groupId: string; groupName: string }
+
+export type ScopeType = "public" | "memo" | "group"
+
+export interface CommentWithScope {
+  id: string
+  content: string
+  visibility: ScopeType
+  groupId?: string
 }
 
 const readerChapters: ChapterContent[] = [
