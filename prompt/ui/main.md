@@ -9,7 +9,7 @@ STYLE / THEME
 
 HERO LAYOUT
 Top area:
-- App name (placeholder): “NightPage”
+- App name (placeholder): “booki”
 - Short tagline: “Read a passage. Leave a thought. Continue with someone else’s perspective.”
 
 Centerpiece (main visual):

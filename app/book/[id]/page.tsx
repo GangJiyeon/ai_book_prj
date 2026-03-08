@@ -21,13 +21,7 @@ export default async function BookPage({ params }: BookPageProps) {
   return (
     <>
       <StarField />
-      <div
-        className="relative z-10 min-h-screen"
-        style={{
-          background:
-            "linear-gradient(180deg, #080c18 0%, #0a0e1a 20%, #0f1629 60%, #0a0e1a 100%)",
-        }}
-      >
+      <div className="relative z-10 min-h-screen bg-background">
         <Navbar />
 
         <main className="mx-auto max-w-5xl px-4 py-8 lg:px-6">

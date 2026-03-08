@@ -20,19 +20,8 @@ export function LoginForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setShowError(false)
-    setLoading(true)
-    const capturedId = id
-    const capturedPassword = password
-    setTimeout(() => {
-      setLoading(false)
-      if (capturedId === "111" && capturedPassword === "111") {
-        localStorage.setItem("user", JSON.stringify({ username: "user111" }))
-        router.push("/")
-      } else {
-        setShowError(true)
-      }
-    }, 1500)
+    localStorage.setItem("user", JSON.stringify({ username: id || "guest" }))
+    window.location.href = "/"
   }
 
   function handleForgotSubmit(e: React.FormEvent) {
@@ -51,24 +40,13 @@ export function LoginForm() {
         <ChevronLeft className="h-5 w-5" />
       </button>
 
-      {/* Card with subtle glow border */}
+      {/* Card */}
       <div
-        className="relative rounded-xl border border-border/60 overflow-hidden"
+        className="relative rounded-xl border border-border bg-card overflow-hidden"
         style={{
-          background: "linear-gradient(180deg, rgba(17,24,39,0.95) 0%, rgba(10,14,26,0.98) 100%)",
-          boxShadow:
-            "0 0 80px 8px rgba(245,216,122,0.04), 0 0 0 1px rgba(30,45,82,0.5), 0 24px 48px rgba(0,0,0,0.4)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)",
         }}
       >
-        {/* Top glow accent line */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, rgba(245,216,122,0.3) 50%, transparent 100%)",
-          }}
-          aria-hidden="true"
-        />
 
         <div className="px-6 pt-8 pb-8 sm:px-8 sm:pt-10 sm:pb-10">
           {/* Brand + heading */}
@@ -76,7 +54,7 @@ export function LoginForm() {
             <Link href="/" className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-moonlight" aria-hidden="true" />
               <span className="font-sans text-lg font-bold tracking-tight text-foreground">
-                Night<span className="text-moonlight">Page</span>
+                book<span className="text-moonlight">i</span>
               </span>
             </Link>
             <div className="text-center">
@@ -121,7 +99,6 @@ export function LoginForm() {
                 type="text"
                 placeholder="you@example.com"
                 autoComplete="email"
-                required
                 value={id}
                 onChange={(e) => setId(e.target.value)}
                 className="h-10 rounded-lg border border-border/60 bg-secondary/20 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
@@ -144,7 +121,6 @@ export function LoginForm() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Your password"
                   autoComplete="current-password"
-                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="h-10 w-full rounded-lg border border-border/60 bg-secondary/20 px-3.5 pr-10 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
@@ -218,8 +194,8 @@ export function LoginForm() {
                   <Dialog.Content
                     className="fixed left-1/2 top-1/2 z-50 w-[90vw] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border/60 p-6 outline-none"
                     style={{
-                      background: "linear-gradient(180deg, #111827 0%, #0a0e1a 100%)",
-                      boxShadow: "0 0 60px 6px rgba(245,216,122,0.04), 0 24px 48px rgba(0,0,0,0.5)",
+                      background: "#ffffff",
+                      boxShadow: "0 4px 24px rgba(0,0,0,0.1)",
                     }}
                   >
                     <Dialog.Title className="font-sans text-lg font-semibold text-foreground">
@@ -308,7 +284,7 @@ export function LoginForm() {
                 className="px-3 text-xs text-muted-foreground"
                 style={{
                   fontFamily: "var(--font-body)",
-                  backgroundColor: "rgba(14,19,32,0.95)",
+                  backgroundColor: "#ffffff",
                 }}
               >
                 or

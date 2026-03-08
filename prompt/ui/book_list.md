@@ -13,7 +13,7 @@ VISUAL THEME
 - Rounded corners, soft shadows, subtle borders
 
 TOP NAV
-- Left: app name “NightPage”
+- Left: app name “booki”
 - Links: Home, Books, Bookshelf, Profile/Account
 - Right: Search icon + “Sign in” button (mock)
 
