@@ -53,12 +53,5 @@ export function StarField() {
     return () => window.removeEventListener("resize", resize)
   }, [])
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0"
-      style={{ opacity: 0.6 }}
-    />
-  )
+  return null
 }

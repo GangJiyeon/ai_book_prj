@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation"
 import { BookOpen, Eye, EyeOff, Loader2, AlertCircle, ChevronLeft } from "lucide-react"
 import * as Dialog from "@radix-ui/react-dialog"
 
-export function LoginForm() {
-  const router = useRouter()
+export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -15,19 +14,24 @@ export function LoginForm() {
   const [forgotOpen, setForgotOpen] = useState(false)
   const [forgotEmail, setForgotEmail] = useState("")
   const [forgotSent, setForgotSent] = useState(false)
-  const [id, setId] = useState("")
-  const [password, setPassword] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    localStorage.setItem("user", JSON.stringify({ username: id || "guest" }))
-    window.location.href = "/"
+    setShowError(false)
+    setLoading(true)
+    // Mock loading, then show error state
+    setTimeout(() => {
+      setLoading(false)
+      setShowError(true)
+    }, 1500)
   }
 
   function handleForgotSubmit(e: React.FormEvent) {
     e.preventDefault()
     setForgotSent(true)
   }
+
+  const router = useRouter()
 
   return (
     <div className="relative w-full max-w-[420px] mx-auto px-4 sm:px-0">
@@ -59,7 +63,7 @@ export function LoginForm() {
             </Link>
             <div className="text-center">
               <h1 className="font-sans text-2xl font-semibold text-foreground tracking-tight">
-                Welcome back
+                Create an account
               </h1>
               <p
                 className="mt-1.5 text-sm text-muted-foreground"
@@ -78,7 +82,7 @@ export function LoginForm() {
             >
               <AlertCircle className="h-4 w-4 shrink-0 text-hotpink" />
               <p className="text-sm text-hotpink" style={{ fontFamily: "var(--font-body)" }}>
-                Invalid email or password.
+                Something went wrong.
               </p>
             </div>
           )}
@@ -96,11 +100,10 @@ export function LoginForm() {
               </label>
               <input
                 id="email"
-                type="text"
+                type="email"
                 placeholder="you@example.com"
                 autoComplete="email"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
+                required
                 className="h-10 rounded-lg border border-border/60 bg-secondary/20 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                 style={{ fontFamily: "var(--font-body)" }}
               />
@@ -120,9 +123,8 @@ export function LoginForm() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Your password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  required
                   className="h-10 w-full rounded-lg border border-border/60 bg-secondary/20 px-3.5 pr-10 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                   style={{ fontFamily: "var(--font-body)" }}
                 />
@@ -256,7 +258,7 @@ export function LoginForm() {
               </Dialog.Root>
             </div>
 
-            {/* Login button */}
+            {/* Sign up button */}
             <button
               type="submit"
               disabled={loading}
@@ -266,10 +268,10 @@ export function LoginForm() {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Logging in...</span>
+                  <span>Creating account...</span>
                 </>
               ) : (
-                "Login"
+                "Sign up"
               )}
             </button>
           </form>
@@ -328,17 +330,17 @@ export function LoginForm() {
             We only use your email to save your anchors.
           </p>
 
-          {/* Create account link */}
+          {/* Already have account link */}
           <p
             className="mt-4 text-center text-sm text-muted-foreground"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            {"Don't have an account? "}
+            {"Already have an account? "}
             <Link
-              href="/signup"
+              href="/login"
               className="text-moonlight transition-colors hover:text-moonlight-dim"
             >
-              Create an account
+              Sign in
             </Link>
           </p>
         </div>

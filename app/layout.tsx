@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Lora, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { BottomNav } from '@/components/bottom-nav'
 import './globals.css'
 
 const lora = Lora({
@@ -16,8 +17,14 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'NightPage — Read, Reflect, Exchange',
+  title: 'booki — Read, Reflect, Exchange',
   description: 'Read a passage. Leave a thought. Continue with someone else\'s perspective. A social book exchange app for quiet night reading.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'booki',
+  },
   icons: {
     icon: [
       {
@@ -38,7 +45,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0a0e1a',
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({
@@ -47,9 +54,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${lora.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">
+    <html lang="en" className={`${lora.variable} ${inter.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Restore dark mode before first paint to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="font-sans antialiased pb-16 md:pb-0">
         {children}
+        <BottomNav />
         <Analytics />
       </body>
     </html>

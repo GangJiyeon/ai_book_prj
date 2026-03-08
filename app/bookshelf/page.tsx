@@ -40,16 +40,10 @@ export default function BookshelfPage() {
   return (
     <>
       <StarField />
-      <div
-        className="relative z-10 min-h-screen"
-        style={{
-          background:
-            "linear-gradient(180deg, #080c18 0%, #0a0e1a 20%, #0f1629 60%, #0a0e1a 100%)",
-        }}
-      >
+      <div className="relative z-10 min-h-screen bg-background">
         <Navbar />
 
-        <main className="mx-auto max-w-6xl px-4 py-8 lg:px-6">
+        <main className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
           {/* Page header */}
           <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col gap-2">

@@ -26,13 +26,7 @@ export default function BooksPage() {
   return (
     <>
       <StarField />
-      <div
-        className="relative z-10 min-h-screen"
-        style={{
-          background:
-            "linear-gradient(180deg, #080c18 0%, #0a0e1a 20%, #0f1629 60%, #0a0e1a 100%)",
-        }}
-      >
+      <div className="relative z-10 min-h-screen bg-background">
         <Navbar />
 
         <main className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
@@ -82,7 +76,7 @@ export default function BooksPage() {
                       aria-hidden="true"
                     />
                     <div
-                      className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-border bg-navy-mid shadow-xl py-1"
+                      className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-border bg-card shadow-xl py-1"
                       role="listbox"
                     >
                       {SORT_OPTIONS.map((option) => (

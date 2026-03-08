@@ -9,8 +9,8 @@ interface BookSpineProps {
 }
 
 export function BookSpine({ book }: BookSpineProps) {
-  // Derive spine width from title length for visual variety
-  const baseWidth = Math.max(36, Math.min(56, 28 + book.title.length * 1.2))
+  const mobileWidth = Math.max(28, Math.min(42, 22 + book.title.length * 0.9))
+  const desktopWidth = Math.max(36, Math.min(56, 28 + book.title.length * 1.2))
 
   return (
     <Link
@@ -21,16 +21,22 @@ export function BookSpine({ book }: BookSpineProps) {
     >
       {/* The spine */}
       <div
-        className="relative flex flex-col items-center justify-between rounded-sm transition-all duration-300 ease-out group-hover:-translate-y-3 group-hover:scale-[1.02]"
+        className="relative flex flex-col items-center justify-between rounded-sm transition-all duration-300 ease-out group-hover:-translate-y-3 group-hover:scale-[1.02] h-36.25 sm:h-45"
         style={{
-          width: `${baseWidth}px`,
-          height: "200px",
+          width: `${mobileWidth}px`,
           background: book.spineColor,
           boxShadow: "inset -2px 0 4px rgba(0,0,0,0.3), 2px 4px 12px rgba(0,0,0,0.4)",
           borderLeft: `3px solid ${book.spineAccent}`,
           transformOrigin: "bottom center",
         }}
       >
+        {/* CSS-only responsive width via data attribute */}
+        <style>{`
+          @media (min-width: 640px) {
+            [data-spine-id="${book.id}"] { width: ${desktopWidth}px !important; }
+          }
+        `}</style>
+
         {/* Hover glow */}
         <div
           className="pointer-events-none absolute inset-0 rounded-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -58,10 +64,9 @@ export function BookSpine({ book }: BookSpineProps) {
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <span
-            className="max-h-[140px] truncate text-xs font-semibold leading-tight tracking-wide"
+            className="truncate font-semibold leading-tight tracking-wide max-h-25 sm:max-h-35 text-[10px] sm:text-[11px]"
             style={{
               color: book.textColor,
-              fontSize: "11px",
               transform: "rotate(180deg)",
             }}
           >
