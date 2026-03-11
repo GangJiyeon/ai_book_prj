@@ -2,10 +2,10 @@
 
 import * as Dialog from "@radix-ui/react-dialog"
 import { X, Heart, MessageCircle, BookOpen } from "lucide-react"
-import type { MockBook } from "@/lib/mock-data"
+import type { Book } from "@/lib/types/book"
 
 interface ExcerptModalProps {
-  book: MockBook | null
+  book: Book | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -41,7 +41,7 @@ export function ExcerptModal({ book, open, onOpenChange }: ExcerptModalProps) {
             </Dialog.Close>
           </div>
 
-          {/* Excerpt */}
+          {/* Description */}
           <div className="p-5">
             <blockquote className="relative px-3">
               <span
@@ -51,7 +51,7 @@ export function ExcerptModal({ book, open, onOpenChange }: ExcerptModalProps) {
                 {"\u201C"}
               </span>
               <p className="font-sans text-base leading-relaxed text-foreground/90 italic">
-                {book.excerpt}
+                {book.description ?? "No description available."}
               </p>
               <span
                 className="absolute -bottom-4 right-0 text-4xl leading-none text-moonlight/25 select-none"
@@ -60,31 +60,6 @@ export function ExcerptModal({ book, open, onOpenChange }: ExcerptModalProps) {
                 {"\u201D"}
               </span>
             </blockquote>
-          </div>
-
-          {/* Comments */}
-          <div className="flex flex-col gap-2 px-5 pb-3" style={{ fontFamily: "var(--font-body)" }}>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
-              Reader thoughts
-            </p>
-            {book.excerptComments.map((c, i) => (
-              <div key={i} className="flex items-start gap-2 rounded-lg bg-secondary/40 px-3 py-2">
-                <div
-                  className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-moonlight/15 flex items-center justify-center"
-                  aria-hidden="true"
-                >
-                  <span className="text-[10px] text-moonlight font-mono font-bold">
-                    {c.user[0].toUpperCase()}
-                  </span>
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[11px] font-mono text-muted-foreground truncate">
-                    {c.user}
-                  </span>
-                  <p className="text-xs leading-relaxed text-secondary-foreground">{c.text}</p>
-                </div>
-              </div>
-            ))}
           </div>
 
           {/* Stats + CTA */}

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BookOpen, Eye, EyeOff, Loader2, AlertCircle, ChevronLeft } from "lucide-react"
 import * as Dialog from "@radix-ui/react-dialog"
+import { supabase } from "@/lib/supabase"
 
 export function LoginForm() {
   const router = useRouter()
@@ -18,14 +19,22 @@ export function LoginForm() {
   const [id, setId] = useState("")
   const [password, setPassword] = useState("")
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    localStorage.setItem("user", JSON.stringify({ username: id || "guest" }))
-    window.location.href = "/"
+    setLoading(true)
+    setShowError(false)
+    const { error } = await supabase.auth.signInWithPassword({ email: id, password })
+    setLoading(false)
+    if (error) {
+      setShowError(true)
+    } else {
+      window.location.href = "/"
+    }
   }
 
-  function handleForgotSubmit(e: React.FormEvent) {
+  async function handleForgotSubmit(e: React.FormEvent) {
     e.preventDefault()
+    await supabase.auth.resetPasswordForEmail(forgotEmail)
     setForgotSent(true)
   }
 

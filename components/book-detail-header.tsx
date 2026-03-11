@@ -2,10 +2,23 @@
 
 import Link from "next/link"
 import { ArrowLeft, Pause, MessageCircle, BookOpen, Bookmark } from "lucide-react"
-import type { BookDetail } from "@/lib/mock-data"
+import type { BookDetailData } from "@/lib/types/book-detail"
+
+function coverStyle(book: BookDetailData): React.CSSProperties {
+  if (book.cover_url) return { backgroundImage: `url(${book.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" }
+  const gradients = [
+    "linear-gradient(135deg, #1a2744 0%, #2d1b4e 50%, #1e2d52 100%)",
+    "linear-gradient(135deg, #0f1629 0%, #1a2744 50%, #2a1f3d 100%)",
+    "linear-gradient(135deg, #162040 0%, #1e2d52 50%, #0f1629 100%)",
+    "linear-gradient(135deg, #2a1f3d 0%, #1a2744 50%, #0f2b3d 100%)",
+    "linear-gradient(135deg, #0f2b3d 0%, #162040 50%, #2d1b4e 100%)",
+  ]
+  const i = book.title.charCodeAt(0) % gradients.length
+  return { background: gradients[i] }
+}
 
 interface BookHeaderProps {
-  book: BookDetail
+  book: BookDetailData
 }
 
 export function BookDetailHeader({ book }: BookHeaderProps) {
@@ -15,7 +28,7 @@ export function BookDetailHeader({ book }: BookHeaderProps) {
       <div className="flex shrink-0 justify-center lg:justify-start">
         <div
           className="relative h-[280px] w-[200px] overflow-hidden rounded-xl shadow-2xl sm:h-[320px] sm:w-[220px]"
-          style={{ background: book.coverGradient }}
+          style={coverStyle(book)}
         >
           {/* Subtle inner glow overlay */}
           <div

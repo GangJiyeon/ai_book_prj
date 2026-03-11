@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { Pause, MessageCircle } from "lucide-react"
-import type { BookAnchor } from "@/lib/mock-data"
+import type { AnchorRow } from "@/lib/types/book-detail"
 
 interface PopularAnchorsProps {
-  anchors: BookAnchor[]
+  anchors: AnchorRow[]
   bookTitle: string
   bookAuthor: string
 }

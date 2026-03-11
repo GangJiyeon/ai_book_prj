@@ -4,34 +4,61 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BookOpen, Eye, EyeOff, Loader2, AlertCircle, ChevronLeft } from "lucide-react"
-import * as Dialog from "@radix-ui/react-dialog"
+import { supabase } from "@/lib/supabase"
 
 export function SignupForm() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showError, setShowError] = useState(false)
-  const [forgotOpen, setForgotOpen] = useState(false)
-  const [forgotEmail, setForgotEmail] = useState("")
-  const [forgotSent, setForgotSent] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("Something went wrong.")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [signedUp, setSignedUp] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setShowError(false)
     setLoading(true)
-    // Mock loading, then show error state
-    setTimeout(() => {
-      setLoading(false)
+    const { error } = await supabase.auth.signUp({ email, password })
+    setLoading(false)
+    if (error) {
+      setErrorMessage(error.message)
       setShowError(true)
-    }, 1500)
+    } else {
+      setSignedUp(true)
+    }
   }
 
-  function handleForgotSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setForgotSent(true)
+  if (signedUp) {
+    return (
+      <div className="w-full max-w-[420px] mx-auto px-4 sm:px-0">
+        <div
+          className="rounded-xl border border-border bg-card px-6 py-10 sm:px-8 text-center"
+          style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}
+        >
+          <div className="mb-4 flex justify-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-moonlight/10 border border-moonlight/20">
+              <BookOpen className="h-5 w-5 text-moonlight" />
+            </div>
+          </div>
+          <h2 className="font-sans text-xl font-semibold text-foreground">Check your inbox</h2>
+          <p className="mt-2 text-sm text-muted-foreground" style={{ fontFamily: "var(--font-body)" }}>
+            We sent a confirmation link to <span className="text-foreground font-medium">{email}</span>.
+            <br />Please verify your email to sign in.
+          </p>
+          <Link
+            href="/login"
+            className="mt-6 inline-flex h-10 items-center justify-center rounded-lg bg-moonlight px-6 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            Go to login
+          </Link>
+        </div>
+      </div>
+    )
   }
-
-  const router = useRouter()
 
   return (
     <div className="relative w-full max-w-[420px] mx-auto px-4 sm:px-0">
@@ -51,7 +78,6 @@ export function SignupForm() {
           boxShadow: "0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)",
         }}
       >
-
         <div className="px-6 pt-8 pb-8 sm:px-8 sm:pt-10 sm:pb-10">
           {/* Brand + heading */}
           <div className="flex flex-col items-center gap-3 mb-8">
@@ -82,7 +108,7 @@ export function SignupForm() {
             >
               <AlertCircle className="h-4 w-4 shrink-0 text-hotpink" />
               <p className="text-sm text-hotpink" style={{ fontFamily: "var(--font-body)" }}>
-                Something went wrong.
+                {errorMessage}
               </p>
             </div>
           )}
@@ -104,6 +130,8 @@ export function SignupForm() {
                 placeholder="you@example.com"
                 autoComplete="email"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="h-10 rounded-lg border border-border/60 bg-secondary/20 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                 style={{ fontFamily: "var(--font-body)" }}
               />
@@ -125,6 +153,8 @@ export function SignupForm() {
                   placeholder="Your password"
                   autoComplete="new-password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="h-10 w-full rounded-lg border border-border/60 bg-secondary/20 px-3.5 pr-10 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20 hover:border-border"
                   style={{ fontFamily: "var(--font-body)" }}
                 />
@@ -143,8 +173,8 @@ export function SignupForm() {
               </div>
             </div>
 
-            {/* Remember me + Forgot */}
-            <div className="flex items-center justify-between">
+            {/* Remember me */}
+            <div className="flex items-center">
               <label
                 className="flex items-center gap-2 cursor-pointer select-none"
                 style={{ fontFamily: "var(--font-body)" }}
@@ -161,13 +191,7 @@ export function SignupForm() {
                   }`}
                 >
                   {rememberMe && (
-                    <svg
-                      width="10"
-                      height="8"
-                      viewBox="0 0 10 8"
-                      fill="none"
-                      aria-hidden="true"
-                    >
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden="true">
                       <path
                         d="M1 4L3.5 6.5L9 1"
                         stroke="#0a0e1a"
@@ -180,82 +204,6 @@ export function SignupForm() {
                 </button>
                 <span className="text-xs text-muted-foreground">Remember me</span>
               </label>
-
-              <Dialog.Root open={forgotOpen} onOpenChange={(open) => { setForgotOpen(open); if (!open) setForgotSent(false) }}>
-                <Dialog.Trigger asChild>
-                  <button
-                    type="button"
-                    className="text-xs text-muted-foreground transition-colors hover:text-moonlight"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    Forgot password?
-                  </button>
-                </Dialog.Trigger>
-                <Dialog.Portal>
-                  <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
-                  <Dialog.Content
-                    className="fixed left-1/2 top-1/2 z-50 w-[90vw] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-xl border border-border/60 p-6 outline-none"
-                    style={{
-                      background: "#ffffff",
-                      boxShadow: "0 4px 24px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <Dialog.Title className="font-sans text-lg font-semibold text-foreground">
-                      Reset password
-                    </Dialog.Title>
-                    <Dialog.Description
-                      className="mt-1.5 text-sm text-muted-foreground"
-                      style={{ fontFamily: "var(--font-body)" }}
-                    >
-                      {forgotSent
-                        ? "Check your inbox for a reset link."
-                        : "Enter your email and we'll send a reset link."}
-                    </Dialog.Description>
-
-                    {!forgotSent ? (
-                      <form onSubmit={handleForgotSubmit} className="mt-4 flex flex-col gap-3">
-                        <input
-                          type="email"
-                          placeholder="you@example.com"
-                          required
-                          value={forgotEmail}
-                          onChange={(e) => setForgotEmail(e.target.value)}
-                          className="h-10 rounded-lg border border-border/60 bg-secondary/20 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-all outline-none focus:border-moonlight/40 focus:ring-1 focus:ring-moonlight/20"
-                          style={{ fontFamily: "var(--font-body)" }}
-                        />
-                        <button
-                          type="submit"
-                          className="h-10 rounded-lg bg-moonlight text-sm font-medium text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98]"
-                          style={{ fontFamily: "var(--font-body)" }}
-                        >
-                          Send reset link
-                        </button>
-                      </form>
-                    ) : (
-                      <div className="mt-4 flex items-center gap-2 rounded-lg border border-moonlight/20 bg-moonlight/5 px-3.5 py-2.5">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                          <circle cx="8" cy="8" r="7" stroke="#f5d87a" strokeWidth="1.5" />
-                          <path d="M5 8L7 10L11 6" stroke="#f5d87a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <p className="text-sm text-moonlight" style={{ fontFamily: "var(--font-body)" }}>
-                          Reset link sent to {forgotEmail}
-                        </p>
-                      </div>
-                    )}
-
-                    <Dialog.Close asChild>
-                      <button
-                        className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground"
-                        aria-label="Close"
-                      >
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                          <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                      </button>
-                    </Dialog.Close>
-                  </Dialog.Content>
-                </Dialog.Portal>
-              </Dialog.Root>
             </div>
 
             {/* Sign up button */}
@@ -284,10 +232,7 @@ export function SignupForm() {
             <div className="relative flex justify-center">
               <span
                 className="px-3 text-xs text-muted-foreground"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  backgroundColor: "#ffffff",
-                }}
+                style={{ fontFamily: "var(--font-body)", backgroundColor: "var(--card)" }}
               >
                 or
               </span>

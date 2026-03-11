@@ -1,7 +1,7 @@
 "use client"
 
 import { BookSpine } from "@/components/book-spine"
-import type { ShelfBook } from "@/lib/mock-data"
+import type { ShelfBook } from "@/lib/types/bookshelf"
 
 interface ShelfRowProps {
   label: string
@@ -11,8 +11,6 @@ interface ShelfRowProps {
 }
 
 export function ShelfRow({ label, books, description }: ShelfRowProps) {
-  if (books.length === 0) return null
-
   return (
     <section className="flex flex-col gap-3">
       {/* Shelf label */}
@@ -20,12 +18,14 @@ export function ShelfRow({ label, books, description }: ShelfRowProps) {
         <h2 className="font-sans text-lg font-semibold tracking-tight text-foreground">
           {label}
         </h2>
-        <span
-          className="text-xs text-muted-foreground"
-          style={{ fontFamily: "var(--font-body)" }}
-        >
-          {books.length} {books.length === 1 ? "book" : "books"}
-        </span>
+        {books.length > 0 && (
+          <span
+            className="text-xs text-muted-foreground"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {books.length} {books.length === 1 ? "book" : "books"}
+          </span>
+        )}
         {description && (
           <span
             className="hidden text-xs text-muted-foreground/60 sm:inline"
@@ -43,9 +43,20 @@ export function ShelfRow({ label, books, description }: ShelfRowProps) {
           className="flex items-end gap-1.5 overflow-x-auto pb-2 scrollbar-none min-h-43.75 sm:min-h-57.5"
           style={{ paddingLeft: "4px", paddingRight: "16px" }}
         >
-          {books.map((book) => (
-            <BookSpine key={book.id} book={book} />
-          ))}
+          {books.length === 0 ? (
+            <div
+              className="flex flex-1 items-center pb-4"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              <p className="text-xs text-muted-foreground/50 italic">
+                No books here yet.
+              </p>
+            </div>
+          ) : (
+            books.map((book) => (
+              <BookSpine key={book.id} book={book} />
+            ))
+          )}
         </div>
 
         {/* Shelf surface */}

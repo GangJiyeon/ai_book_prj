@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "home": "홈",
+    "books": "책",
+    "share": "공유",
+    "groups": "그룹",
+    "bookshelf": "책장"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "save": "저장",
+    "saving": "저장 중…",
+    "cancel": "취소",
+    "confirm": "확인",
+    "delete": "삭제",
+    "edit": "수정",
+    "back": "뒤로",
+    "more": "더 보기",
+    "search": "검색",
+    "settings": "설정"
+  },
+  "auth": {
+    "login": "로그인",
+    "logout": "로그아웃",
+    "signup": "회원가입",
+    "email": "이메일",
+    "password": "비밀번호",
+    "name": "이름"
+  },
+  "settings": {
+    "title": "계정 설정",
+    "subtitle": "프로필과 독서 정체성을 관리하세요.",
+    "profileInfo": "프로필 정보",
+    "profileDesc": "공개 신원의 기본 정보입니다.",
+    "username": "사용자명",
+    "bio": "소개",
+    "bioPlaceholder": "자신을 소개해 주세요",
+    "emailSecurity": "이메일 & 보안",
+    "emailSecurityDesc": "로그인 방법과 계정 보안을 관리하세요.",
+    "email": "이메일",
+    "changePassword": "비밀번호 변경",
+    "newPassword": "새 비밀번호",
+    "confirmPassword": "새 비밀번호 확인",
+    "updatePassword": "비밀번호 업데이트",
+    "updating": "업데이트 중…",
+    "readingPrefs": "독서 설정",
+    "readingPrefsDesc": "리더 설정을 조정하세요.",
+    "language": "언어",
+    "darkMode": "다크 모드",
+    "logout": "로그아웃",
+    "saved": "저장됨!",
+    "passwordUpdated": "비밀번호가 업데이트됐습니다!",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+    "passwordTooShort": "비밀번호는 8자 이상이어야 합니다."
+  }
+}

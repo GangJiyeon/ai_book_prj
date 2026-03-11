@@ -12,7 +12,7 @@ Senteces Highlite #FFF1C2
 
 
 ## darkmode
-Background      #121212
+Background      #242424
 Card            #1E1E1E
 Comment Card    #262626
 Text Primary    #E6E6E6

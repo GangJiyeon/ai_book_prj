@@ -1,20 +1,22 @@
 "use client"
 
-import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, BookOpen, PenLine, Library, User } from "lucide-react"
+import { Link } from "@/i18n/navigation"
+import { Home, BookOpen, PenLine, Users, Library } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const tabs = [
-  { href: "/", icon: Home, label: "Home" },
-  { href: "/books", icon: BookOpen, label: "Books" },
-  { href: "/sentences/new", icon: PenLine, label: "Share", accent: true },
-  { href: "/saved", icon: Library, label: "Bookshelf" },
-  { href: "/profile", icon: User, label: "Profile" },
-]
+import { useTranslations } from "next-intl"
 
 export function BottomNav() {
+  const t = useTranslations("nav")
   const pathname = usePathname()
+
+  const tabs = [
+    { href: "/" as const, icon: Home, label: t("home") },
+    { href: "/books" as const, icon: BookOpen, label: t("books") },
+    { href: "/sentences/new" as const, icon: PenLine, label: t("share"), accent: true },
+    { href: "/groups" as const, icon: Users, label: t("groups") },
+    { href: "/saved" as const, icon: Library, label: t("bookshelf") },
+  ]
 
   return (
     <nav
@@ -25,7 +27,7 @@ export function BottomNav() {
       <div className="flex items-center justify-around h-14">
         {tabs.map(({ href, icon: Icon, label, accent }) => {
           const isActive =
-            href === "/" ? pathname === "/" : pathname.startsWith(href)
+            href === "/" ? /^\/[^/]+\/?$/.test(pathname) : pathname.includes(href)
 
           if (accent) {
             return (

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import * as Dialog from "@radix-ui/react-dialog"
 import { MessageCircle, X, TrendingUp } from "lucide-react"
-import type { TrendingPause } from "@/lib/mock-data"
+import type { TrendingPause } from "@/lib/queries/books"
 
 interface TrendingPanelProps {
   pauses: TrendingPause[]

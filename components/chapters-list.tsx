@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { Pause } from "lucide-react"
-import type { BookChapter } from "@/lib/mock-data"
+import type { ChapterRow } from "@/lib/types/book-detail"
 
 interface ChaptersListProps {
-  chapters: BookChapter[]
+  chapters: ChapterRow[]
   bookId?: string
 }
 

@@ -6,12 +6,17 @@ import * as Switch from "@radix-ui/react-switch"
 import { X, SlidersHorizontal } from "lucide-react"
 import { GENRES } from "@/lib/mock-data"
 
+export interface FilterValues {
+  genres: string[]
+}
+
 interface FilterDrawerProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onApply: (filters: FilterValues) => void
 }
 
-export function FilterDrawer({ open, onOpenChange }: FilterDrawerProps) {
+export function FilterDrawer({ open, onOpenChange, onApply }: FilterDrawerProps) {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [language, setLanguage] = useState("all")
   const [length, setLength] = useState("all")
@@ -166,7 +171,10 @@ export function FilterDrawer({ open, onOpenChange }: FilterDrawerProps) {
               Clear all
             </button>
             <button
-              onClick={() => onOpenChange(false)}
+              onClick={() => {
+                onApply({ genres: selectedGenres })
+                onOpenChange(false)
+              }}
               className="inline-flex h-9 flex-1 items-center justify-center rounded-lg bg-moonlight text-sm font-semibold text-primary-foreground transition-colors hover:bg-moonlight-dim"
             >
               Apply filters

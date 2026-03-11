@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "home": "Home",
+    "books": "Books",
+    "share": "Share",
+    "groups": "Groups",
+    "bookshelf": "Bookshelf"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "more": "More",
+    "search": "Search",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile and reading identity.",
+    "profileInfo": "Profile Info",
+    "profileDesc": "Basic information for your public identity.",
+    "username": "Username",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "emailSecurity": "Email & Security",
+    "emailSecurityDesc": "Manage how you log in and secure your account.",
+    "email": "Email",
+    "changePassword": "Change password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "updatePassword": "Update password",
+    "updating": "Updating…",
+    "readingPrefs": "Reading Preferences",
+    "readingPrefsDesc": "Adjust your reader settings.",
+    "language": "Language",
+    "darkMode": "Dark mode",
+    "logout": "Log out",
+    "saved": "Saved!",
+    "passwordUpdated": "Password updated!",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordTooShort": "Password must be at least 8 characters."
+  }
+}

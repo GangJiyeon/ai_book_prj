@@ -1,12 +1,16 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Link, usePathname } from "@/i18n/navigation"
 import { BookOpen, Search, User, PenLine, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { supabase } from "@/lib/supabase"
+import { useTranslations } from "next-intl"
 
 export function Navbar() {
+  const t = useTranslations("nav")
+  const tAuth = useTranslations("auth")
+  const tCommon = useTranslations("common")
   const pathname = usePathname()
   const [avatarOpen, setAvatarOpen] = useState(false)
   const avatarRef = useRef<HTMLDivElement>(null)
@@ -15,9 +19,16 @@ export function Navbar() {
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem("user")
-    setUser(stored ? JSON.parse(stored) : null)
-  }, [pathname])
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ? { username: session.user.email ?? "" } : null)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ? { username: session.user.email ?? "" } : null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"))
@@ -30,8 +41,8 @@ export function Navbar() {
     localStorage.setItem("theme", next ? "dark" : "light")
   }
 
-  function handleLogout() {
-    localStorage.removeItem("user")
+  async function handleLogout() {
+    await supabase.auth.signOut()
     setUser(null)
     setAvatarOpen(false)
   }
@@ -47,10 +58,10 @@ export function Navbar() {
   }, [])
 
   const mainNavLinks = [
-    { href: "/", label: "Home" },
-    { href: "/books", label: "Books" },
-    { href: "/groups", label: "Groups" },
-    { href: "/saved", label: "Bookshelf" },
+    { href: "/" as const, label: t("home") },
+    { href: "/books" as const, label: t("books") },
+    { href: "/groups" as const, label: t("groups") },
+    { href: "/saved" as const, label: t("bookshelf") },
   ]
 
   return (
@@ -95,7 +106,7 @@ export function Navbar() {
             style={{ fontFamily: "var(--font-body)" }}
           >
             <PenLine className="h-3.5 w-3.5" />
-            Share
+            {t("share")}
           </Link>
 
           {/* Dark mode toggle */}
@@ -115,6 +126,15 @@ export function Navbar() {
             <Search className="h-4 w-4" />
           </button>
 
+          {/* User icon — mobile only */}
+          <Link
+            href="/profile"
+            aria-label="Profile"
+            className="md:hidden flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary/40 hover:text-foreground"
+          >
+            <User className="h-4 w-4" />
+          </Link>
+
           {/* Auth — desktop only */}
           <div className="hidden md:flex items-center gap-2">
             {!isLoggedIn ? (
@@ -124,14 +144,14 @@ export function Navbar() {
                   className="h-8 inline-flex items-center justify-center rounded-lg border border-border bg-secondary/30 px-4 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
-                  Login
+                  {tAuth("login")}
                 </Link>
                 <Link
                   href="/signup"
                   className="h-8 inline-flex items-center justify-center rounded-lg border border-border bg-secondary/30 px-4 text-xs font-medium text-secondary-foreground transition-colors hover:border-moonlight/30 hover:text-moonlight"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
-                  Sign up
+                  {tAuth("signup")}
                 </Link>
               </>
             ) : (
@@ -154,14 +174,14 @@ export function Navbar() {
                       className="block px-4 py-2 text-sm text-foreground hover:bg-secondary/30 transition-colors"
                       onClick={() => setAvatarOpen(false)}
                     >
-                      Setting
+                      {tCommon("settings")}
                     </Link>
                     <div className="my-1 h-px bg-border/40" />
                     <button
                       className="block w-full px-4 py-2 text-left text-sm text-hotpink hover:bg-secondary/30 transition-colors"
                       onClick={handleLogout}
                     >
-                      Log out
+                      {tAuth("logout")}
                     </button>
                   </div>
                 )}
