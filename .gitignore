@@ -17,6 +17,10 @@ out/
 dist/
 build/
 
+# Package manager lockfiles (npm only)
+pnpm-lock.yaml
+yarn.lock
+
 # Logs
 *.log
 npm-debug.log*
