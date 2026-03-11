@@ -28,6 +28,7 @@ export type FeedSentence = {
   type: "sentence"
   id: string
   text: string
+  myThought: string | null
   bookTitle: string
   authorName: string
   username: string
@@ -67,7 +68,7 @@ export async function fetchFeedBatch(
     supabase
       .from("sentences")
       .select(`
-        id, text, book_title, author_name, likes_count, saves_count, created_at,
+        id, text, my_thought, book_title, author_name, likes_count, saves_count, created_at,
         users(username)
       `)
       .order("likes_count", { ascending: false })
@@ -101,6 +102,7 @@ export async function fetchFeedBatch(
       type: "sentence",
       id: s.id,
       text: s.text,
+      myThought: s.my_thought ?? null,
       bookTitle: s.book_title,
       authorName: s.author_name,
       username: (u as { username: string } | null)?.username ?? "unknown",

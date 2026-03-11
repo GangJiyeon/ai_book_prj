@@ -299,13 +299,19 @@ function SentenceCard({
         </blockquote>
       </Link>
 
-      <div className="mb-4 flex min-w-0 items-center gap-1 overflow-hidden" style={{ fontFamily: "var(--font-body)" }}>
+      <div className="mb-3 flex min-w-0 items-center gap-1 overflow-hidden" style={{ fontFamily: "var(--font-body)" }}>
         <span className="max-w-[40%] shrink-0 truncate text-xs font-medium text-moonlight">{item.bookTitle}</span>
         <span className="shrink-0 text-xs text-muted-foreground">·</span>
         <span className="min-w-0 shrink truncate text-xs text-muted-foreground">{item.authorName}</span>
         <span className="shrink-0 text-xs text-muted-foreground">·</span>
         <span className="shrink-0 text-xs text-muted-foreground">@{item.username}</span>
       </div>
+
+      {item.myThought && (
+        <div className="mb-4 rounded-xl bg-secondary/40 px-4 py-3" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-xs text-muted-foreground leading-relaxed">{item.myThought}</p>
+        </div>
+      )}
 
       <div className="flex items-center justify-between" style={{ fontFamily: "var(--font-body)" }}>
         <div className="flex items-center gap-4">

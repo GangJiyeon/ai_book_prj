@@ -22,6 +22,7 @@ export default function NewSentencePage() {
   const [bookTitle, setBookTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [text, setText] = useState("")
+  const [myThought, setMyThought] = useState("")
   const [submitted, setSubmitted] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -88,6 +89,7 @@ export default function NewSentencePage() {
         bookTitle: bookTitle.trim(),
         authorName: author.trim(),
         text: text.trim(),
+        myThought: myThought.trim() || undefined,
       })
       setSubmitted(true)
       setTimeout(() => router.push("/"), 1500)
@@ -218,6 +220,21 @@ export default function NewSentencePage() {
                 <p className={`mt-1 text-right text-xs ${remaining < 20 ? "text-hotpink" : "text-muted-foreground"}`}>
                   {remaining} characters left
                 </p>
+              </div>
+
+              {/* My thought */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  My thought <span className="text-muted-foreground text-xs font-normal">(선택)</span>
+                </label>
+                <textarea
+                  value={myThought}
+                  onChange={(e) => setMyThought(e.target.value)}
+                  placeholder="이 문장이 마음에 남은 이유, 느낀 점…"
+                  rows={3}
+                  className="w-full resize-none rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:border-moonlight/50 focus:outline-none focus:ring-1 focus:ring-moonlight/30 transition-colors"
+                  style={{ fontFamily: "var(--font-body)" }}
+                />
               </div>
 
               {saveError && (

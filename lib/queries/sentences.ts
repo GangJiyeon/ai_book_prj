@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase"
 export interface SentenceItem {
   id: string
   text: string
+  myThought: string | null
   bookTitle: string
   authorName: string
   likesCount: number
@@ -27,13 +28,14 @@ export async function getMyWrittenSentences(): Promise<SentenceItem[]> {
 
   const { data } = await supabase
     .from("sentences")
-    .select("id, text, book_title, author_name, likes_count, saves_count, created_at")
+    .select("id, text, my_thought, book_title, author_name, likes_count, saves_count, created_at")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
 
   return (data ?? []).map((s) => ({
     id: s.id,
     text: s.text,
+    myThought: s.my_thought ?? null,
     bookTitle: s.book_title,
     authorName: s.author_name,
     likesCount: s.likes_count,
@@ -51,7 +53,7 @@ export async function getMySavedSentences(): Promise<SentenceItem[]> {
     .from("saves")
     .select(`
       created_at,
-      sentences(id, text, book_title, author_name, likes_count, saves_count, user_id)
+      sentences(id, text, my_thought, book_title, author_name, likes_count, saves_count, user_id)
     `)
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
@@ -62,6 +64,7 @@ export async function getMySavedSentences(): Promise<SentenceItem[]> {
     return [{
       id: s.id,
       text: s.text,
+      myThought: s.my_thought ?? null,
       bookTitle: s.book_title,
       authorName: s.author_name,
       likesCount: s.likes_count,
@@ -77,11 +80,13 @@ export async function saveSentence({
   bookTitle,
   authorName,
   text,
+  myThought,
 }: {
   bookId: string | null
   bookTitle: string
   authorName: string
   text: string
+  myThought?: string
 }) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error("로그인이 필요합니다")
@@ -92,6 +97,7 @@ export async function saveSentence({
     book_title: bookTitle,
     author_name: authorName,
     text,
+    my_thought: myThought || null,
   })
 
   if (error) throw error
